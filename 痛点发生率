@@ -1,0 +1,19 @@
+import pandas as pd
+import numpy as np 
+data = pd.read_excel("D:\data\数据.xlsx")#读取数据
+NNS = data['Q13']#总体满意度
+ids = ['Q17_1','Q17_2']#读取相应题号
+result_table = pd.DataFrame()#创建空表
+for i in range(len(ids)):
+    c = data[ids[i]]
+    index1 = (c == 1) # 选择的用户
+    index0 = (c == 0) # 未选择的用户
+    nns1 = NNS[index1] # 选择的用户分数
+    nns0 = NNS[index0] # 未选择的用户分数
+    rate1 = np.sum(nns1>8)/len(nns1) #选择的用户 nns
+    rate0 = np.sum(nns0>8)/len(nns0) #未选择的用户nns
+    rate = rate1-rate0 #痛点敏感度
+    dd = {'题目':[ids[i]],'选-NNS':[rate1],'未选-NNS':[rate0],'痛点率':[rate]}
+    tt = pd.DataFrame(dd)
+    result_table = result_table.append(tt) #存表
+result_table.to_excel("D:\data\小爱Domain痛点敏感度率.xlsx") # 输出
