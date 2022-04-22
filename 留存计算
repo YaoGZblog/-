@@ -1,0 +1,18 @@
+import pandas as pd
+import numpy as np
+
+data = pd.read_excel("E:\\临时工作\\test\\data.xlsx")
+num_users = data.shape[0]
+class_diff = ['gender','occupation']
+result_table = pd.DataFrame()
+for i in range(len(class_diff)):
+    class_one = np.unique(data[class_diff[i]])   
+    for j in range(len(class_one)):
+        index = (data[class_diff[i]] == class_one[j])
+        active1 = np.mean(data.Time1[index])
+        active3 = np.mean(data.Time3[index])
+        active7 = np.mean(data.Time7[index])
+        dd = {'分类':[class_one[j]],'次留':[active1],'三日留':[active3],'七日留':[active7]}
+        tt = pd.DataFrame(dd)
+        result_table = result_table.append(tt) 
+result_table.to_excel("E:\\临时工作\\test\\result.xlsx")
